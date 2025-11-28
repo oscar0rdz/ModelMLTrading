@@ -1,7 +1,7 @@
 # ModelMLTrading ·  Modelo de Machine Learning Prediccion en (BTC/USDT · 15m)
 
 
-Este proyecto de **Machine Learning aplicado predecir las proximas tres velas . Muestra un pipeline completo para: Descargar los datos limpiarlos y dejalors listos para ante de pasar al Modelo, despues el modelo lo que hace es  1.- estimar probabilidades de que el take‑profit se alcance antes que el stop‑loss en un horizonte de tres velas, 2.- calibrar esas probabilidades para que reflejen frecuencia observa   3.- decidir con un umbral basado en valor esperado (EV) para poder evaluar e ilustrar  su comportamiento mediante Walk‑Forward. Y despues se reliza un BackTesting para ver de forma mas realisata cual es el desempeño del modelo  en un entorno medianamente mas peago a lo real.
+Este proyecto de Machine Learning aplicado predecir las proximas tres velas . Muestra un pipeline completo para: Descargar los datos limpiarlos y dejalors listos para ante de pasar al Modelo, despues el modelo lo que hace es  1.- estimar probabilidades de que el take‑profit se alcance antes que el stop‑loss en un horizonte de tres velas, 2.- calibrar esas probabilidades para que reflejen frecuencia observa   3.- decidir con un umbral basado en valor esperado (EV) para poder evaluar e ilustrar  su comportamiento mediante Walk‑Forward. Y despues se reliza un BackTesting para ver de forma mas realisata cual es el desempeño del modelo  en un entorno medianamente mas peago a lo real.
 
 Lo que quise explorar con este proyetco fueron distintas herramientos y procesos de Machine Learning aplicados a Trading 
 Considerando las variables del mercado crypto y cituaciones contigentes  como la manipuacion  o notcias y apesar de eso
