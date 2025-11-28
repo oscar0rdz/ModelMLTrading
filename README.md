@@ -1,12 +1,16 @@
-# ModelMLTrading · Pipeline de clasificación, calibración y evaluación temporal (BTC/USDT · 15m)
+# ModelMLTrading ·  Modelo de Machine Learning Prediccion en (BTC/USDT · 15m)
 
-Proyecto de **Machine Learning aplicado a mercados** . Muestra un pipeline completo para: (1) **estimar probabilidades** de que el *take‑profit* se alcance antes que el *stop‑loss* en un horizonte de **3 velas**, (2) **calibrar** esas probabilidades para que reflejen frecuencia observada y (3) **decidir** con un **umbral basado en valor esperado (EV)**, ilustrando su comportamiento mediante **Walk‑Forward Analysis (WFA)**.
 
-> Uso principal: demostración educativa y de portafolio sobre buenas prácticas de ML en finanzas. No es asesoría financiera.
+Este proyecto de **Machine Learning aplicado predecir las proximas tres velas . Muestra un pipeline completo para: Descargar los datos limpiarlos y dejalors listos para ante de pasar al Modelo, despues el modelo lo que hace es  1 estimar probabilidades de que el take‑profit se alcance antes que el stop‑loss en un horizonte de 3 velas, 2 calibrar esas probabilidades para que reflejen frecuencia observa   3 decidir con un umbral basado en valor esperado (EV) para poder evaluar e ilustrar  su comportamiento mediante Walk‑Forward. Y despues se reliza un BackTesting para ver de forma mas realisata cual es el desempeño del modelo  en un entorno medianamente mas peago a lo real.
+
+Lo que quise explorar con este proyetco fueron distintas herramientos y procesos de Machine Learning aplicados a Trading 
+Considerando las variables del mercado crypto y cituaciones contigentes  como la manipuacion  o notcias y apesar de eso
+tratar de econtrar algo de consitnecia en el aprendizaje del modelo 
+
 
 ---
 
-## 1) Qué problema resuelve y cómo
+## 1) Lo que queria que el modleo resolviera 
 
 * **Tarea**: clasificación binaria «TP antes que SL» en 3 velas (BTC/USDT, 15m).
 * **Modelo**: `XGBoostClassifier` con *tuning* (Optuna). La métrica objetivo de búsqueda es **PR‑AUC**, adecuada para clases desbalanceadas.
@@ -16,13 +20,14 @@ Proyecto de **Machine Learning aplicado a mercados** . Muestra un pipeline compl
 
 Razonamiento del diseño:
 
-* PR‑AUC prioriza aciertos en la fracción minoritaria de eventos útiles para operar.
-* La calibración hace que probabilidades y frecuencias observadas coincidan, requisito para convertir `p̂` en tamaños/umbrales.
-* El EV integra **comisiones, spread y slippage**, alineando la decisión con el costo real de transacción.
-* WFA evita conclusiones a partir de un único *split* y muestra sensibilidad de reglas a cambios de régimen.
+* PR‑AUC prioriza aciertos en la fracción minoritaria de eventos útiles para operar tratando que se enfoque en donde podria ser importante .
+* La calibración hace que probabilidades y frecuencias observadas coincidan, requisito para convertir `p̂` en tamaños/umbrales y asi decidir.
+* El EV integra una combinacion  **comisiones, spread y slippage**, alineando la decisión con el costo real de transacción.
+* WFA evita conclusiones a partir de un único *split* y muestra sensibilidad de reglas a cambios de régimen tratando de ver en resulatdo general.
 
 ---
-## Cómo funciona y **por qué** se hace así
+## Como es que funciona 
+
 
 1. **Procesamiento & *feature engineering*** (`ML/data_processing.py`)  
    - **Qué:** OHLCV de **BTC/USDT** (15m) + indicadores técnicos (SMA/EMA, RSI, MACD, ATR, Bandas de Bollinger, ADX, OBV, etc.).  
@@ -98,13 +103,14 @@ e.
 
 ## 4) Qué muestra la simulación (WFA) y por qué es útil aquí
 
-El **backtest** se usa como **instrumento de inspección**: permite ver cómo la regla se comporta bajo distintas ventanas, costos y densidad de señales. En la muestra mostrada, la combinación de umbral exigente, filtros y costos **reduce la frecuencia** y hace exigente sostener el rendimiento agregado.
+El **backtest** se usa como **instrumento ilustrativo **: permite ver cómo la regla se comporta bajo distintas ventanas, costos y densidad de señales.Tenia curisoidad de como reaccionaba a mas caos  En la muestra realizada, la combinación de umbral  quise hacer apretados  filtros y costos  para **reduce la frecuencia** y hace exigente sostener el rendimiento agregado.
 
-Aun con esa cautela, el aprendizaje central es sólido: el modelo **clasifica por encima del azar**, sus probabilidades están **calibradas**, y los gráficos por bandas de `p̂` muestran una relación coherente entre probabilidad y aciertos. Este es el tipo de evidencia que **sí** traslada valor a una estrategia operativa una vez que se fijan costos, *risk‑reward* y ritmo de operación con parámetros consistentes.
+Considerando eso, el aprendizaje en general me parecio aceptable : el modelo **clasifica por encima del azar** y eso es lo que me importaba 
+ y lo que me costo , sus probabilidades están **calibradas**, y los gráficos por bandas de `p̂` muestran una relación coherente entre probabilidad y aciertos. Este es el tipo de evidencia que **sí** traslada valor a una estrategia operativa una vez que se fijan costos, *risk‑reward* y ritmo de operación con parámetros consistentes.
 
 La pregunta a la decisión operable
 
-La meta inicial fue sencilla: **convertir probabilidades en decisiones que valgan la pena** en el marco de 15m. Tras construir *features* y fijar **PR‑AUC** como métrica, ejecuté **Optuna**. La búsqueda no fue lineal: *trials* 40–41 se movieron en `0.642–0.644`, el 42 fue *pruned* y el **trial 12** fijó el tope con `0.64437`. Esa región de hiperparámetros (profundidad 6, `min_child_weight≈10`, `colsample_bytree≈0.94`, `gamma≈1.7`) mostró **estabilidad**.  
+La meta inicial fue  **convertir probabilidades en decisiones que valgan la pena** en el marco de 15m. Y para llegar a esa decidion de Time Frame y numero de velas futruas fu despues d euna buen a busqueda y despuyes de toodos los ajuste ahi fue donde encontre algo d econistencia y  ya despues construir *features* y fijar **PR‑AUC** como métrica, ejecuté **Optuna**. por que stuve batallando con los paramntros  La búsqueda no fue lineal: *trials* 40–41 se movieron en `0.642–0.644`, el 42 fue *pruned* y el **trial 12** fijó el tope con `0.64437`. Esa región de hiperparámetros (profundidad 6, `min_child_weight≈10`, `colsample_bytree≈0.94`, `gamma≈1.7`) mostró **estabilidad**.  
 
 ## 5) Cómo reproducir
 
@@ -153,7 +159,4 @@ Artefactos principales en `ML/results/`:
 
 ---
 
-## 7) Licencia y aviso
-
-Proyecto educativo y de portafolio. **No** constituye asesoramiento financiero ni recomendación de inversión. Las simulaciones son **ilustrativas** y están sujetas a supuestos de datos, costos y ejecución.
 
