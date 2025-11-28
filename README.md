@@ -145,8 +145,8 @@ Artefactos principales en `ML/results/`:
 ├── ML/
 │   ├── data/
 │   ├── logs/
-│   ├── results/           # artefactos: *.joblib, métricas, CSV
-│   ├── assets/            # GIFs y figuras del README (sin LFS)
+│   ├── results/        
+│   ├── assets/            
 │   ├── data_processing.py
 │   ├── model_training.py
 │   └── backtest_improved.py
