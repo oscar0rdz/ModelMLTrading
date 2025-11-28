@@ -10,7 +10,7 @@ tratar de econtrar algo de consitnecia en el aprendizaje del modelo
 
 ---
 
-## 1) Lo que queria que el modleo resolviera 
+## Detalles del modelo
 
 * **Tarea**: clasificación binaria «TP antes que SL» en 3 velas (BTC/USDT, 15m).
 * **Modelo**: `XGBoostClassifier` con *tuning* (Optuna). La métrica objetivo de búsqueda es **PR‑AUC**, adecuada para clases desbalanceadas.
@@ -20,16 +20,16 @@ tratar de econtrar algo de consitnecia en el aprendizaje del modelo
 
 Razonamiento del diseño:
 
-* PR‑AUC prioriza aciertos en la fracción minoritaria de eventos útiles para operar tratando que se enfoque en donde podria ser importante .
-* La calibración hace que probabilidades y frecuencias observadas coincidan, requisito para convertir `p̂` en tamaños/umbrales y asi decidir.
-* El EV integra una combinacion  **comisiones, spread y slippage**, alineando la decisión con el costo real de transacción.
-* WFA evita conclusiones a partir de un único *split* y muestra sensibilidad de reglas a cambios de régimen tratando de ver en resulatdo general.
+* Lo principal es qeu PR‑AUC prioriza aciertos en la fracción minoritaria de eventos útiles para operar tratando que se enfoque en donde podria ser importante .
+* La calibración hace que probabilidades y frecuencias observadas coincidan, y esto es un requisito para convertir `p̂` en tamaños/umbrales y asi decidir.
+* El EV integra una combinacion  de  **comisiones, spread y slippage**, alineando la decisión con el costo real de transacción.
+*  Y el WFA evita  resultados  a partir de un único *split* y muestra sensibilidad de reglas a cambios de régimen tratando de ver el resulatdo  mas general.
 
 ---
 ## Como es que funciona 
+Esta dvidido en tres partes principales que es Descarga, Modelo Y Backtes
 
-
-1. **Procesamiento & *feature engineering*** (`ML/data_processing.py`)  
+1. **Procesamiento y *feature engineering*** (`ML/data_processing.py`)  
    - **Qué:** OHLCV de **BTC/USDT** (15m) + indicadores técnicos (SMA/EMA, RSI, MACD, ATR, Bandas de Bollinger, ADX, OBV, etc.).  
    - **Por qué:** mejorar **señal‑ruido** y capturar **tendencia, momentum y volatilidad**; el modelo aprende patrones que por sí solos no están en el precio bruto.  
    - **Etiquetado dinámico (ATR, 3 velas):** TP/SL se escalan con volatilidad. **Por qué:** evita metas fijas desalineadas con el régimen de mercado.
